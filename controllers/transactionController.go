@@ -144,6 +144,11 @@ func Transfer(ctx *gin.Context) {
 		return
 	}
 
+	if c.Username == c2.Username {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid request!"})
+		return
+	}
+
 	var CurrentBalance uint = c.Balance
 	if CurrentBalance < input.Amount {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "insufficient balance!"})
@@ -180,6 +185,23 @@ func Transfer(ctx *gin.Context) {
 	message := fmt.Sprintf("Transfer success! Your balance is $%d", res.Balance)
 
 	ctx.JSON(http.StatusOK, gin.H{"message": message})
+}
+
+func HistoryCustomer(ctx *gin.Context) {
+	auth, shouldReturn := CheckAuth(ctx)
+	if shouldReturn {
+		return
+	}
+
+	tx, err := models.HistoryCustomer(auth.UserId)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"data": tx})
+
 }
 
 func CheckAuth(ctx *gin.Context) (*token.AuthDetails, bool) {

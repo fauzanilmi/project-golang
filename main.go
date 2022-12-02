@@ -25,7 +25,7 @@ func main() {
 	customerGroup.POST("/topup", controllers.TopUpBalance)
 	customerGroup.POST("/withdraw", controllers.WithdrawBalance)
 	customerGroup.POST("/transfer", controllers.Transfer)
-	customerGroup.POST("/history", controllers.HistoryCustomer)
+	customerGroup.GET("/history", controllers.HistoryCustomer)
 
 	restAPI.Run(":8080")
 
