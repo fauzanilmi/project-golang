@@ -24,3 +24,16 @@ func (tx *Transaction) UpdateBalance() (*Transaction, error) {
 
 	return tx, nil
 }
+
+func HistoryCustomer(custId uint) ([]Transaction, error) {
+
+	var tx []Transaction
+
+	result := DB.Where("customer_id = ?", custId).Order("created_at DESC, id DESC").Find(&tx)
+	if result.Error != nil {
+		return tx, result.Error
+	}
+
+	return tx, nil
+
+}
